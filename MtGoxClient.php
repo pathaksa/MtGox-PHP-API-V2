@@ -40,8 +40,8 @@ class MtGoxClient
     public $pair;
 
     /**
-     * @param $key
-     * @param $secret
+     * @param $apiKey
+     * @param $apiSecret
      */
     public function __construct($apiKey, $apiSecret)
     {
@@ -58,9 +58,9 @@ class MtGoxClient
     }
 
     /**
-     * Queries a method of the MtGox API
+     * Queries a method of the MtGox API.
      *
-     * @param $path
+     * @param string $method
      * @param array $request
      * @return mixed
      * @throws Exception
@@ -140,7 +140,7 @@ class MtGoxClient
     }
 
     /**
-     * Get account details associated with the current API Authentication
+     * Get account details associated with the current API Authentication.
      *
      * @require API Rights: Get Info
      * @return mixed
@@ -152,7 +152,7 @@ class MtGoxClient
     }
 
     /**
-     * Get the most recent information for a currency pair
+     * Get the most recent information for a currency pair.
      *
      * @return mixed
      */
@@ -163,6 +163,8 @@ class MtGoxClient
     }
 
     /**
+     * Get currency information.
+     *
      * @return mixed
      */
     function getCurrency() {
@@ -172,6 +174,8 @@ class MtGoxClient
     }
 
     /**
+     * Get information on current orders.
+     *
      * @return mixed
      */
     function getOrders() {
@@ -181,9 +185,8 @@ class MtGoxClient
     }
 
     /**
-     * Get an up-to-date quote for a bid or ask transaction
+     * Get an up-to-date quote for a bid or ask transaction.
      *
-     * @param string $pair
      * @param string $type
      * @param string $amount
      * @return Array
@@ -198,7 +201,8 @@ class MtGoxClient
     }
 
     /**
-     * @param $type
+     * Place a bid order of a specific amount and bid price.
+     *
      * @param float $amount
      * @param $price
      * @return mixed
@@ -209,7 +213,8 @@ class MtGoxClient
     }
 
     /**
-     * @param $type
+     * Place an ask order of a specific amount and ask price.
+     *
      * @param float $amount
      * @param $price
      * @return mixed
@@ -220,6 +225,8 @@ class MtGoxClient
     }
 
     /**
+     * Place an order of a specific amount and bid/ask price.
+     *
      * @param $type
      * @param float $amount
      * @param $price
@@ -242,6 +249,8 @@ class MtGoxClient
     }
 
     /**
+     * Cancels an order by Order ID.
+     *
      * @param $orderId
      * @return mixed
      */
@@ -256,6 +265,8 @@ class MtGoxClient
     }
 
     /**
+     * Returns a unique bitcoin deposit address for a given MtGox account (new each time).
+     *
      * @param string $account Account ID fo the following format M12345678X
      * @return mixed
      */
@@ -287,6 +298,8 @@ class MtGoxClient
     }
 
     /**
+     * Gets the transaction history of a specified currency wallet.
+     *
      * @param string $currency
      * @param int $page
      * @return mixed
@@ -301,6 +314,8 @@ class MtGoxClient
     }
 
     /**
+     * Sets the current pair for calling methods which require pair prefix.
+     *
      * @param string $pair
      * @return $this
      */
@@ -310,6 +325,8 @@ class MtGoxClient
     }
 
     /**
+     * Check if a variable is not empty.
+     *
      * @param $variable
      * @param $message
      */
@@ -320,6 +337,8 @@ class MtGoxClient
     }
 
     /**
+     * Throws errors.
+     *
      * @param $type
      * @param $message
      * @throws Exception

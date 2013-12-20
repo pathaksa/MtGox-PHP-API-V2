@@ -31,6 +31,12 @@ $mtGoxClient = new MtGoxClient(
 $result = $mtGoxClient->getInfo();
 #$result = $mtGoxClient->getWalletHistory();
 #$result = $mtGoxClient->setPair('BTCEUR')->getCurrency();
+
+// If you want to get an quote for selling 0.23769001 BTC the call would look like this:.
+#$result = $mtGoxClient->orderQuote('ask',23769001);
+// the resulting price will be displayed based on the divisions for your currency here:
+// https://bitbucket.org/nitrous/mtgox-api/overview#markdown-header-background
+
 #$result = $mtGoxClient->orderAdd('bid',1000000,1340293 );
 #$result = $mtGoxClient->orderCancel('4d484979-6237-4e66-b76d-4e8085a8b8be');
 #$result = $mtGoxClient->getDepositAddress();

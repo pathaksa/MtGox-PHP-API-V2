@@ -47,7 +47,7 @@ class MtGoxClient
     {
         define('API_ERROR_EXCEPTION', 1);
 
-        $this->endPoint = 'https://data.mtgox.com/api/2/';
+        $this->endPoint = 'https://anxpro.com/api/2/';
         $this->pair = 'BTCUSD';
 
         $this->checkRequired($apiKey,'You must specify an API Key');
@@ -67,6 +67,7 @@ class MtGoxClient
      */
     public function query($method, array $request = array())
     {
+        echo "";
         // API settings
         $apiKey = $this->apiKey;
         $apiSecret = $this->apiSecret;
@@ -115,6 +116,10 @@ class MtGoxClient
 
         // generate API url
         $url = $this->endPoint . $method;
+        // print_r("this is the URL \n");
+        // print_r($url);
+
+//print "url: $url\n";
 
         // set CURL options
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -146,7 +151,8 @@ class MtGoxClient
      * @return mixed
      */
     function getInfo() {
-        $result = $this->query( $this->pair . '/money/info');
+        $result = $this->query('money/info');
+#        $result = $this->query( $this->pair . '/money/info');
 
         return $result;
     }
@@ -158,6 +164,17 @@ class MtGoxClient
      */
     function getTicker() {
         $result = $this->query( $this->pair . '/money/ticker');
+
+        return $result;
+    }
+
+    /**
+     * Get the full order book.
+     *
+     * @return mixed
+     */
+    function getOrderBook() {
+        $result = $this->query( $this->pair . '/money/depth/full');
 
         return $result;
     }
@@ -195,6 +212,22 @@ class MtGoxClient
         $result  = $this->query( $this->pair . '/money/order/quote', array(
             'type'      => $type,
             'amount'    => $amount
+        ));
+
+        return $result;
+    }
+
+    /**
+    * Get transaction history of user.
+    *
+    * @param string $startTime
+    * @param string $endTime
+    * @return Array
+    */
+    function executedTrade($startTime = NULL, $endTime = NULL) {
+        $result = $this->query('money/trade/list', array(
+            'from' => $startTime,
+            'to' => $endTime
         ));
 
         return $result;
@@ -243,6 +276,27 @@ class MtGoxClient
             'type'          => $type,
             'amount_int'    => $amount,
             'price_int'     => $price
+        ));
+
+        return $result;
+    }
+
+    /**
+     * Place an order of a specific amount and bid/ask price.
+     *
+     * @param $type
+     * @param float $amount
+     * @param $price
+     * @return mixed
+     */
+    function orderAddMarket($type, $amount = 0.0001) {
+        if ( !in_array($type, array('bid', 'ask')) ) {
+            $this->error(API_ERROR_EXCEPTION, 'You must specify a type: bid or ask');
+        }
+
+        $result  = $this->query( $this->pair . '/money/order/add', array(
+            'type'          => $type,
+            'amount_int'    => $amount,
         ));
 
         return $result;
@@ -304,10 +358,28 @@ class MtGoxClient
      * @param int $page
      * @return mixed
      */
-    function getWalletHistory($currency = 'BTC', $page = 1) {
-        $result  = $this->query( $this->pair . '/money/wallet/history', array(
+    function getWalletHistory($currency, $page) {
+        $result  = $this->query('money/wallet/history', array(
             'currency'  => $currency,
             'page'      =>  $page
+        ));
+
+        return $result;
+    }
+
+    /**
+     * Checks to see if the order was executed.
+     *
+     * @param string $orderID
+     * @return mixed
+     */
+    function orderCompleted($type, $orderID, $nonce) {
+        $this->checkRequired($orderID,'You must specify an Order ID');
+
+        $result  = $this->query( $this->pair .'/money/order/result', array(
+            'order' => $orderID,
+            'type' => $type,
+            'nonce' => $nonce
         ));
 
         return $result;
